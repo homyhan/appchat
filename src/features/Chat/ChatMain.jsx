@@ -6,8 +6,7 @@ import "./ChatMain.css"
 
 const ChatMain = () => {
   return (
-    <>
-      
+    <>      
       <div className="guiChat">
         <div className="container-fluid">
           <div className="row">
