@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchMesPeople, fetchMesRoom } from "./thunk";
 import "./ChatMain.css";
 import CreateRoom from "./CreateRoom";
 import { FindPerson } from "./FindPerson";
-import { fetchMesPeople, fetchMesRoom } from "./thunk";
 
 const ListUser = () => {
   const dispatch = useDispatch();
@@ -23,50 +23,49 @@ const ListUser = () => {
     } else {
       await dispatch(fetchMesPeople(socket, username));
     }
-
-    console.log(username, type);
   };
 
+
+
   return (
-    <section style={{ paddingRight: "0px" }} className="discussions">
-      <div style={{ display: "flex" }} className="discussion search">
-        <CreateRoom></CreateRoom>
-        <FindPerson></FindPerson>
-      </div>
-      <div className="listUserChat">
-        {listUser?.map((item, index) => {
-          return (
-            <div
-              key={index}
-              style={
-                item.name === user.username || item.name === ""
-                  ? { display: "none" }
-                  : {}
-              }
-              className="discussion"
-              onClick={() => handleChat(item.name, item.type)}
-            >
-              <div
-                className="photo"
-                style={{
-                  backgroundImage:
-                    "url(http://e0.365dm.com/16/08/16-9/20/theirry-henry-sky-sports-pundit_3766131.jpg?20161212144602)",
-                }}
-              >
-                <div className="online" />
-              </div>
-              <div className="desc-contact">
-                <p className="name">{item.name}</p>
-                <p className="message">
-                  Let's meet for a coffee or something today ?
-                </p>
-              </div>
-              <div className="timer">3 min</div>
-            </div>
-          );
-        })}
-      </div>
-    </section>
+
+
+      <section style={{paddingRight:'0px', paddingLeft: '0px'}} className="discussions">
+        <div style={{display:'flex'}} className="discussion search">
+          <CreateRoom></CreateRoom>
+          <FindPerson></FindPerson>
+        </div>
+        <div id="style-11" className="listUserChat">
+          {listUser?.map((item, index) => {
+            return (
+                <div key={index} style={item.name === user.username || item.name===""?{display: 'none'}:{}} className="discussion" onClick={() => handleChat(item.name, item.type)}>
+                  <div
+                      className="photo"
+                      style={item.type===0? {
+                        backgroundImage:
+                            "url(https://img.freepik.com/premium-vector/portrait-brunette-woman-avatar-female-person-vector-icon-adult-flat-style_605517-159.jpg?w=2000)",
+                      }: {
+                        backgroundImage:
+                            "url(https://img.freepik.com/premium-vector/businesspeople-character-avatar-icon_24877-18272.jpg)",
+                      }}
+
+                  >
+                    <div className="online" />
+                  </div>
+                  <div className="desc-contact">
+                    <p className="name">{item.name}</p>
+                    <p className="message">
+                      Let's meet for a coffee or something today ?
+                    </p>
+                  </div>
+                  <div className="timer">3 min</div>
+                </div>
+            );
+          })}
+
+
+        </div>
+      </section>
   );
 };
 
