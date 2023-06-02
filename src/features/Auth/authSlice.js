@@ -1,12 +1,18 @@
 import {produce} from 'immer';
 const initialState ={
-    user: null,    
+    user: null,
+    socket: null
 }
 
 export const authReducer = (state= initialState, {type, payload})=>{
-    return produce(state, (darft)=>{
+    return produce(state, (draft)=>{
         if(type === "LOGIN"){
-            darft.user = payload;            
+            draft.user = {
+                code: payload.code,
+                username: payload.username
+            };
+
+            draft.socket= payload.socketObj;
         }
         
         
