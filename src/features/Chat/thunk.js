@@ -1,49 +1,3 @@
-// export const fetchMesPeople = (socketCreate, userOrther) => (dispatch) => {
-//   const getMesPeople = {
-//     action: "onchat",
-//     data: {
-//       event: "GET_PEOPLE_CHAT_MES",
-//       data: {
-//         name: userOrther,
-//         page: 1,
-//       },
-//     },
-//   };
-//   socketCreate.send(JSON.stringify(getMesPeople));
-//   socketCreate.onmessage = (evt) => {
-//     const res = JSON.parse(evt.data);
-//     console.log(res);
-//     dispatch({
-//       type: "LIST_MES_PEOPLE",
-//       payload: res.data,
-//     });
-//      if(res.event==="SEND_CHAT"){
-//       console.log("send chat");
-//       const getMesPeople = {
-//         action: "onchat",
-//         data: {
-//           event: "GET_PEOPLE_CHAT_MES",
-//           data: {
-//             name: userOrther,
-//             page: 1,
-//           },
-//         },
-//       };
-//       socketCreate.send(JSON.stringify(getMesPeople));
-//       socketCreate.onmessage = (evt)=>{
-//         const respo = JSON.parse(evt.data);
-//         console.log(respo, res);
-//         dispatch({
-//           type: "LIST_MES_PEOPLE",
-//           payload: respo.data,
-//         });
-
-//       }
-
-//     }
-
-//   };
-// };
 
 
 export const fetchMesPeople = (socketCreate, userOrther) => (dispatch) => {
@@ -100,52 +54,6 @@ export const fetchMesPeople = (socketCreate, userOrther) => (dispatch) => {
         handleNewMessage(res);
     };
 };
-
-
-// export const fetchMesRoom = (socketCreate, userOrther) => (dispatch) => {
-//   const getMesPeople = {
-//     action: "onchat",
-//     data: {
-//       event: "GET_ROOM_CHAT_MES",
-//       data: {
-//         name: userOrther,
-//         page: 1,
-//       },
-//     },
-//   };
-//   socketCreate.send(JSON.stringify(getMesPeople));
-//   socketCreate.onmessage = (evt) => {
-//     const res = JSON.parse(evt.data);
-//     console.log(res);
-//     dispatch({
-//       type: "LIST_MES_ROOM",
-//       payload: res.data,
-//     });
-//     if(res.event==="SEND_CHAT"){
-//       console.log("send chat");
-//       const getMesPeople = {
-//         action: "onchat",
-//         data: {
-//           event: "GET_ROOM_CHAT_MES",
-//           data: {
-//             name: userOrther,
-//             page: 1,
-//           },
-//         },
-//       };
-//       socketCreate.send(JSON.stringify(getMesPeople));
-//       socketCreate.onmessage = (evt)=>{
-//         const respo = JSON.parse(evt.data);
-//         console.log("respo", respo);
-//         dispatch({
-//           type: "LIST_MES_ROOM",
-//           payload: respo.data,
-//         });
-//       }
-//     }
-//   };
-
-// };
 
 
 export const fetchMesRoom = (socketCreate, userOrther) => (dispatch) => {
