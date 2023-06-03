@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMesPeople, fetchMesRoom, joinRoom } from "./thunk";
+
 export const FindPerson = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [isRoom, setIsRoom] = useState(0);
@@ -23,7 +24,8 @@ export const FindPerson = () => {
         },
       },
     };
-        // Gửi yêu cầu sử dụng WebSocket
+
+    // Gửi yêu cầu sử dụng WebSocket
     // const socket = socket;
     socket.send(JSON.stringify(findPerson));
 
@@ -71,15 +73,17 @@ export const FindPerson = () => {
 
     }
   };
+
   return (
     <div>
-      <form >        
+      <form onSubmit={handleSubmit}>        
         <div style={{justifyContent:'center', marginTop:'20px'}} className="d-flex input-group">
-          <input style={{width: 'auto', margin:'0px'}} type="text" />
+          <input style={{width: 'auto', margin:'0px'}} type="text" value={userOrther} onChange={handleChange} />
           <input
           style={{width: '22px', margin:'0px'}}
             type="checkbox"
-            
+            checked={isChecked}
+            onChange={handleCheckboxChange}
           />
         </div>
 
@@ -87,6 +91,4 @@ export const FindPerson = () => {
       </form>
     </div>
   );
-}
-
-
+};
