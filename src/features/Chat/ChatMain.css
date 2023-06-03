@@ -1,6 +1,93 @@
+/*
+.chatMysefl{
+    width: 70%;
+    margin-left: auto;
+}
+.chatOther{
+    width: 70%;
+    margin-right: auto;
+}
+
+.chatMysefl p{
+    background-color: rgb(153, 153, 255);
+    color: black;
+    margin-right: 12px;
+}
+.chatOther p{
+    background-color: white;
+    color: black;
+    margin-left: 12px;
+}
+.contentChat p:first-child{
+    padding: 10px 12px 0px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin-bottom: 0px;
+}
+.contentChat p:last-child{
+    padding: 0px 12px 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.chatbox_content{
+    height: 400px;
+    overflow-y: auto;
+    background-color: rgba(255, 255, 255, 0.712);
+    scrollbar-width: thin;
+    scrollbar-color: #d4aa70 #e4e4e4;
+}
+
+.chatbox_title{
+    padding: 10px 20px;
+    background-color: white;
+    border-bottom: 1px solid gray;
+    color: black;
+}
+.chatbox_title p{
+    margin-bottom: 0px;
+}
+.listChat p{
+    margin-bottom: 0px;
+}
+
+
+
+
+
+
+.picker-container {
+    position: relative;
+    width: 300px;
+  }
+  .emoji-icon {
+    cursor: pointer;
+    position: absolute;
+    top: 8px;
+    right: 5px;
+  }
+  .input-style {
+    padding: 18px 30px 7px 10px;
+    width: calc(100% - 40px);
+    border-radius: 3px;
+    border: 1px solid #999;
+    margin-bottom: 10px;
+  }
+
+  .emoji-picker-react {
+    position: absolute;
+    bottom: 40px;
+    right: 0;
+  } */
+
+html, body{
+  height: 100%;
+  width: 100%;
+}
 body {
   /* padding: 5%; */
   background-color: #f5f5f5;
+  overflow: hidden;
 }
 
 .container {
@@ -54,7 +141,7 @@ body {
 
 .discussions {
   width: 35%;
-  height: 700px;
+  /* height: 700px; */
   box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   background-color: #87a3ec;
@@ -336,4 +423,100 @@ body {
 .listUserChat{
   height: 550px;
   overflow-y: scroll;
+}
+
+#style-11::-webkit-scrollbar-track
+{
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  background-color: #F5F5F5;
+  border-radius: 10px;
+}
+
+#style-11::-webkit-scrollbar
+{
+  width: 10px;
+  background-color: #F5F5F5;
+}
+
+#style-11::-webkit-scrollbar-thumb
+{
+  background-color: #3366FF;
+  border-radius: 10px;
+  background-image: -webkit-linear-gradient(0deg,
+  rgba(255, 255, 255, 0.5) 25%,
+  transparent 25%,
+  transparent 50%,
+  rgba(255, 255, 255, 0.5) 50%,
+  rgba(255, 255, 255, 0.5) 75%,
+  transparent 75%,
+  transparent)
+}
+
+
+
+
+/* CSS ICON POSITION  */
+.inputContent{
+  position: relative;
+  width: 100%;
+}
+.chooseIcon{
+  position: absolute;
+  top: 0;
+  right: 0px;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+}
+
+.boxEmoji{
+  position: absolute;
+  top: -430px;
+  right: 0;
+}
+.chooseFile{
+  position: absolute;
+  top: 0;
+  right: 50px;
+}
+/* .chooseFile input{
+  padding-bottom: 30px;
+} */
+
+/* CUSTOM INPUT FILE  */
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.custom-file-input::before {
+  content: 'File';
+  display: inline-block;
+  background: linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
+}
+.custom-file-input:hover::before {
+  border-color: black;
+}
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+.custom-file-input{
+  height: 40px;
+  width: 42px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+
+/* ACTIVE LIST USER  */
+.discussion.active{
+  background-color: white;
 }
