@@ -20,7 +20,8 @@ export const fetchMesPeople = (socketCreate, userOrther) => (dispatch) => {
       });
     };
   };
-  export const fetchMesRoom = (socketCreate, userOrther) => (dispatch) => {
+
+export const fetchMesRoom = (socketCreate, userOrther) => (dispatch) => {
     const getMesPeople = {
       action: "onchat",
       data: {
@@ -41,7 +42,7 @@ export const fetchMesPeople = (socketCreate, userOrther) => (dispatch) => {
       });
     };
   
-  };
+};
 
 
 
@@ -64,8 +65,30 @@ export const fetchListUser = (socketCreate)=> async (dispatch)=>{
         payload: res.data,
       });
     };    
-  }
+};
 
+export const joinRoom = (socketCreate, userOrther) => (dispatch) => {
+    console.log(userOrther);
+    const joinRoom = {
+        action: "onchat",
+        data: {
+            event: "JOIN_ROOM",
+            data: {
+                name: userOrther,
+            },
+        },
+    };
+
+    socketCreate.send(JSON.stringify(joinRoom));
+    socketCreate.onmessage = (evt) => {
+        const res = JSON.parse(evt.data);
+        console.log(res);
+        dispatch({
+            type: "LIST_MES_ROOM",
+            payload: res.data,
+        });
+    };
+};
 
 
 
