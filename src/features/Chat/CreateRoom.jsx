@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2'
 
 const CreateRoom = () => {
 
@@ -8,6 +9,9 @@ const CreateRoom = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        if(roomName==="" ||roomName.split(" ").join("")===""){
+            return alert("Vui long nhap noi dung");
+        }
 
         //Gửi yêu cầu tạo phòng đến API
         const createRoomRequest = {
@@ -28,6 +32,23 @@ const CreateRoom = () => {
         socketCreate.onmessage = (event) => {
             const response = JSON.parse(event.data);
             console.log(response);
+            if(response.status==="success"){
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: response.status,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                setRoomName("");
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: response.status,
+                    text: response.mes,
+
+                })
+            }
 
         };
 

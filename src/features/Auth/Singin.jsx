@@ -3,6 +3,7 @@ import "./Signin.css";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {fetchListUser} from "../Chat/thunk";
+import Swal from 'sweetalert2'
 
 const Singin = () => {
     const [isLogged, setIsLogged] = useState(false);
@@ -44,6 +45,22 @@ const Singin = () => {
         socket.onmessage = (event) => {
             const response = JSON.parse(event.data);
             console.log(response);
+            if(response.status==="success"){
+                Swal.fire({
+                    position: 'top-end',
+                    icon: response.status,
+                    title: response.mes,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: response.status,
+                    text: response.mes,
+
+                })
+            }
             socket.close();
         };
     };
@@ -78,7 +95,13 @@ const Singin = () => {
                 localStorage.setItem("DATA_RELOGIN", JSON.stringify(response.data));
                 localStorage.setItem("USERNAME", JSON.stringify(username));
                 console.log("socket khi dn thanh cong", socket);
-
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: response.status,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
                 await dispatch({
                     type: "LOGIN",
                     payload: {
@@ -97,6 +120,12 @@ const Singin = () => {
 
                 return navigate("/chat");
             } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: response.status,
+                    text: response.mes,
+
+                })
                 console.log("login error");
             }
 
