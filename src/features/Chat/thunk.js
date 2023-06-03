@@ -1,25 +1,50 @@
 // export const fetchMesPeople = (socketCreate, userOrther) => (dispatch) => {
-//     const getMesPeople = {
-//       action: "onchat",
+//   const getMesPeople = {
+//     action: "onchat",
+//     data: {
+//       event: "GET_PEOPLE_CHAT_MES",
 //       data: {
-//         event: "GET_PEOPLE_CHAT_MES",
-//         data: {
-//           name: userOrther,
-//           page: 1,
-//         },
+//         name: userOrther,
+//         page: 1,
 //       },
-//     };
-//     socketCreate.send(JSON.stringify(getMesPeople));
-//     socketCreate.onmessage = (evt) => {
-//       const res = JSON.parse(evt.data);
-//       console.log(res);
-//       dispatch({
-//         type: "LIST_MES_PEOPLE",
-//         payload: res.data,
-//
-//       });
-//     };
+//     },
 //   };
+//   socketCreate.send(JSON.stringify(getMesPeople));
+//   socketCreate.onmessage = (evt) => {
+//     const res = JSON.parse(evt.data);
+//     console.log(res);
+//     dispatch({
+//       type: "LIST_MES_PEOPLE",
+//       payload: res.data,
+//     });
+//      if(res.event==="SEND_CHAT"){
+//       console.log("send chat");
+//       const getMesPeople = {
+//         action: "onchat",
+//         data: {
+//           event: "GET_PEOPLE_CHAT_MES",
+//           data: {
+//             name: userOrther,
+//             page: 1,
+//           },
+//         },
+//       };
+//       socketCreate.send(JSON.stringify(getMesPeople));
+//       socketCreate.onmessage = (evt)=>{
+//         const respo = JSON.parse(evt.data);
+//         console.log(respo, res);
+//         dispatch({
+//           type: "LIST_MES_PEOPLE",
+//           payload: respo.data,
+//         });
+
+//       }
+
+//     }
+
+//   };
+// };
+
 
 export const fetchMesPeople = (socketCreate, userOrther) => (dispatch) => {
     let currentSender = null; // Biến lưu trữ người gửi hiện tại
@@ -75,28 +100,53 @@ export const fetchMesPeople = (socketCreate, userOrther) => (dispatch) => {
         handleNewMessage(res);
     };
 };
-  // export const fetchMesRoom = (socketCreate, userOrther) => (dispatch) => {
-  //   const getMesPeople = {
-  //     action: "onchat",
-  //     data: {
-  //       event: "GET_ROOM_CHAT_MES",
-  //       data: {
-  //         name: userOrther,
-  //         page: 1,
-  //       },
-  //     },
-  //   };
-  //   socketCreate.send(JSON.stringify(getMesPeople));
-  //   socketCreate.onmessage = (evt) => {
-  //     const res = JSON.parse(evt.data);
-  //     console.log(res);
-  //     dispatch({
-  //       type: "LIST_MES_ROOM",
-  //       payload: res.data,
-  //     });
-  //   };
-  //
-  // };
+
+
+// export const fetchMesRoom = (socketCreate, userOrther) => (dispatch) => {
+//   const getMesPeople = {
+//     action: "onchat",
+//     data: {
+//       event: "GET_ROOM_CHAT_MES",
+//       data: {
+//         name: userOrther,
+//         page: 1,
+//       },
+//     },
+//   };
+//   socketCreate.send(JSON.stringify(getMesPeople));
+//   socketCreate.onmessage = (evt) => {
+//     const res = JSON.parse(evt.data);
+//     console.log(res);
+//     dispatch({
+//       type: "LIST_MES_ROOM",
+//       payload: res.data,
+//     });
+//     if(res.event==="SEND_CHAT"){
+//       console.log("send chat");
+//       const getMesPeople = {
+//         action: "onchat",
+//         data: {
+//           event: "GET_ROOM_CHAT_MES",
+//           data: {
+//             name: userOrther,
+//             page: 1,
+//           },
+//         },
+//       };
+//       socketCreate.send(JSON.stringify(getMesPeople));
+//       socketCreate.onmessage = (evt)=>{
+//         const respo = JSON.parse(evt.data);
+//         console.log("respo", respo);
+//         dispatch({
+//           type: "LIST_MES_ROOM",
+//           payload: respo.data,
+//         });
+//       }
+//     }
+//   };
+
+// };
+
 
 export const fetchMesRoom = (socketCreate, userOrther) => (dispatch) => {
     let currentSender = null;
@@ -152,27 +202,6 @@ export const fetchMesRoom = (socketCreate, userOrther) => (dispatch) => {
 
 };
 
-export const fetchListUser = (socketCreate)=> async (dispatch)=>{
-    const getUserListRequest = {
-      action: "onchat",
-      data: {
-        event: "GET_USER_LIST",
-      },
-    };
-    
-    socketCreate.send(JSON.stringify(getUserListRequest));
-    
-    socketCreate.onmessage = async (evt) => {
-     const res = JSON.parse(evt.data);
-      
-      console.log("nhan signin", res);
-      await dispatch({
-        type: "USERLIST",
-        payload: res.data,
-      });
-    };    
-  }
-
 
 export const joinRoom = (socketCreate, userOrther) => (dispatch) => {
     console.log(userOrther);
@@ -197,6 +226,55 @@ export const joinRoom = (socketCreate, userOrther) => (dispatch) => {
     };
 };
 
+export const selectedChatItem = (socketCreate, userOrther) => (dispatch) => {};
+
+
+export const fetchMesPeopleReceive = (socketCreate, userOrther) => (dispatch) => {
+    const getMesPeople = {
+        action: "onchat",
+        data: {
+            event: "GET_PEOPLE_CHAT_MES",
+            data: {
+                name: userOrther,
+                page: 1,
+            },
+        },
+    };
+    socketCreate.send(JSON.stringify(getMesPeople));
+    socketCreate.onmessage = (evt) => {
+        const res = JSON.parse(evt.data);
+        console.log(res);
+        dispatch({
+            type: "MES_RECEIVE",
+            payload: res.data,
+        });
+    };
+};
+
+export const fetchListUser = (socketCreate)=> async (dispatch)=>{
+    const getUserListRequest = {
+        action: "onchat",
+        data: {
+            event: "GET_USER_LIST",
+        },
+    };
+
+    socketCreate.send(JSON.stringify(getUserListRequest));
+
+    socketCreate.onmessage = async (evt) => {
+        const res = JSON.parse(evt.data);
+
+        console.log("nhan signin", res);
+        await dispatch({
+            type: "USERLIST",
+            payload: res.data,
+        });
+    };
+    // socketCreate.close();
+    // socketCreate.onmessage = null;
+
+}
+
 export const logout = (socketCreate)=>(dispatch)=>{
     const logout = {
         action: "onchat",
@@ -214,5 +292,3 @@ export const logout = (socketCreate)=>(dispatch)=>{
         console.log("logout", res);
     }
 }
-
-

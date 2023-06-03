@@ -48,7 +48,7 @@ export const FindPerson = () => {
           await dispatch(fetchMesPeople(socket, userOrther));
         } else {
           await dispatch(fetchMesRoom(socket, userOrther));
-
+          await dispatch(joinRoom(socket, userOrther));
           
         }
       } else {
