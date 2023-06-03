@@ -27,6 +27,14 @@ export const chatReducer = (state = initialState, { type, payload }) => {
           isRoom: payload.isRoom
         }
       }
-      
+      if(type === "TO_USER1"){
+        // draft.toUser = {...payload}
+        console.log(payload);
+        draft.toUser = {
+          nameUserChat: payload.nameChatUser,
+          isRoom: payload.isRoom
+        }
+      }
+  
     });
   };
