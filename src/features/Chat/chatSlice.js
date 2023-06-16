@@ -4,11 +4,12 @@ const initialState = {
   listMesPeople:[],
   listMesRoom:null,  
   toUser: null,
+  listNewUser:[]
 };
 
 export const chatReducer = (state = initialState, { type, payload }) => {
     return produce(state, (draft) => {
-      if (type === "USERLIST") {        
+      if (type === "USERLIST") {
         draft.listUser = payload;
       }
       if(type==="LIST_MES_PEOPLE"){
@@ -27,6 +28,13 @@ export const chatReducer = (state = initialState, { type, payload }) => {
           nameUserChat: payload.nameChatUser,
           isRoom: payload.isRoom
         }
+      }
+      if(type==="LISTNEWUSER"){
+        console.log(state);
+        console.log(payload)
+        draft.listNewUser.push(payload);
+
+
       }
   
     });

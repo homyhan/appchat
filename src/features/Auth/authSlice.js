@@ -14,6 +14,9 @@ export const authReducer = (state= initialState, {type, payload})=>{
 
             draft.socket= payload.socketObj;
         }
+        if(type === "LOGOUT"){
+            draft.user=null;
+        }
         
         
     })

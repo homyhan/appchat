@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2'
+import {fetchListUser} from "./thunk";
+import {getWebSocket} from "../../utils/websocket";
 
 const CreateRoom = () => {
-
+    const dispatch = useDispatch();
     const [roomName, setRoomName] = useState('');
-    const {socket} = useSelector(state=>state.auth);
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        const socket = getWebSocket();
         if(roomName==="" ||roomName.split(" ").join("")===""){
             return alert("Vui long nhap noi dung");
         }
@@ -41,6 +43,7 @@ const CreateRoom = () => {
                     timer: 1500
                 })
                 setRoomName("");
+                dispatch(fetchListUser(socketCreate))
             }else{
                 Swal.fire({
                     icon: 'error',

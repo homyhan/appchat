@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import "./Signin.css";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {fetchListUser} from "../Chat/thunk";
 import Swal from 'sweetalert2'
+import {setWebsocket} from "../../utils/websocket";
 
 const Singin = () => {
     const [isLogged, setIsLogged] = useState(false);
@@ -44,7 +45,6 @@ const Singin = () => {
         // Xử lý phản hồi từ API
         socket.onmessage = (event) => {
             const response = JSON.parse(event.data);
-            console.log(response);
             if(response.status==="success"){
                 Swal.fire({
                     position: 'top-end',
@@ -82,6 +82,7 @@ const Singin = () => {
 
         // Gửi yêu cầu sử dụng WebSocket
         const socket = new WebSocket("ws://140.238.54.136:8080/chat/chat");
+
         socket.onopen = () => {
             socket.send(JSON.stringify(requestData));
         };
@@ -89,12 +90,16 @@ const Singin = () => {
         // Xử lý phản hồi từ API
         socket.onmessage = async (event) => {
             const response = JSON.parse(event.data);
-
+            setWebsocket(socket);
             console.log(response);
             if (response.status === "success") {
+                setWebsocket(socket)
                 localStorage.setItem("DATA_RELOGIN", JSON.stringify(response.data));
                 localStorage.setItem("USERNAME", JSON.stringify(username));
-                console.log("socket khi dn thanh cong", socket);
+                sessionStorage.setItem("USERNAME", JSON.stringify(username));
+                sessionStorage.setItem("CODE", JSON.stringify(response?.data?.RE_LOGIN_CODE));
+                localStorage.setItem('loggedInUser', JSON.stringify({ user: username, pass: '12345' }));
+
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
@@ -107,16 +112,16 @@ const Singin = () => {
                     payload: {
                         code: response.data,
                         username,
-                        socketObj: socket
+
                     },
                 });
 
                 // Kiểm tra nếu chưa gọi yêu cầu "GET_USER_LIST" sau khi đăng nhập thành công
-                if (!isLogged) {
-                    setIsLogged(true);
-                    await dispatch(fetchListUser(socket));
-
-                }
+                // if (!isLogged) {
+                //     setIsLogged(true);
+                //     await dispatch(fetchListUser(socket));
+                //
+                // }
 
                 return navigate("/chat");
             } else {
@@ -130,6 +135,9 @@ const Singin = () => {
             }
 
             // socket.close();
+        };
+        return () => {
+            socket.close(); // Đóng kết nối khi component bị hủy
         };
     };
 
