@@ -4,12 +4,13 @@ import "./ChatMain.css";
 import Picker from "emoji-picker-react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchListUser, fetchMesPeople, fetchMesRoom } from "./thunk";
+import {getWebSocket} from "../../utils/websocket";
 
 const ChatBox = ({ scrollRef }) => {
   const { listUser, listMesPeople, toUser, listMesRoom } = useSelector(
     (state) => state.chat
   );
-  const { user, socket } = useSelector((state) => state.auth);
+  const { user} = useSelector((state) => state.auth);
   const [newMes, setNewMes] = useState([]);
   const [content, setContent] = useState("");
   const dispatch = useDispatch();
@@ -18,15 +19,17 @@ const ChatBox = ({ scrollRef }) => {
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
-  const [img, setImg]= useState({});
+  const [img, setImg]= useState(null);
+  const socket = getWebSocket();
 
   useEffect(() => {
-    if (toUser && toUser?.isRoom === 0 && Array.isArray(listMesPeople)) {
+    if (toUser && toUser?.isRoom === 0 && Array.isArray(listMesPeople) && listMesPeople.length!==0) {
       setNewMes([...listMesPeople]);
     } else if (
       toUser &&
       toUser?.isRoom === 1 &&
-      Array.isArray(listMesRoom?.chatData)
+      Array.isArray(listMesRoom?.chatData) &&
+        listMesRoom.length !==0
     ) {
       setNewMes([...listMesRoom?.chatData]);
     }
@@ -49,9 +52,15 @@ const ChatBox = ({ scrollRef }) => {
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
+    const socket = getWebSocket();
     {
       hasEmoji(content) ? console.log("co") : console.log("khong");
     }
+    const imageObj = {
+      type: 'image',
+      data: img,
+    };
+    const imageJson = JSON.stringify(imageObj);
     const sendMes = {
       action: "onchat",
       data: {
@@ -59,18 +68,27 @@ const ChatBox = ({ scrollRef }) => {
         data: {
           type: toUser?.isRoom === 0 ? "people" : "room",
           to: toUser.nameUserChat,
-          mes: hasEmoji(content) ? encodeURIComponent(content) : content,
+          // mes: hasEmoji(content) ? encodeURIComponent(content) : content,
+          mes: img? imageJson: setMessage()
         },
+
       },
     };
     socket.send(JSON.stringify(sendMes));
     setContent("");
+    socket.onmessage = (evt)=>{
+      const res = JSON.parse(evt.data);
+      console.log(res)
+    }
+
+    console.log(img);
 
     if (toUser?.isRoom === 0) {
       await dispatch(fetchMesPeople(socket, toUser?.nameUserChat));
     } else {
       await dispatch(fetchMesRoom(socket, toUser?.nameUserChat));
     }
+    // socket.close();
   };
 
   const handleChange = (event) => {
@@ -109,17 +127,56 @@ const ChatBox = ({ scrollRef }) => {
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = (evt) => {
-      setImg(evt.target.result);   
-      setContent(evt.target.result)   
-      // console.log(img);
+      setImg(evt.target.result);
     };
-    // // return formik.setFieldValue("hinhAnh", file);
-    // setImg({...file});
-    // console.log("hinh anh", file);
-    // console.log("img", img);
-    // setContent(file);
-    // console.log(typeof(content));
+
+    console.log(typeof(content));
   };
+
+  const setMessage = ()=>{
+    if(hasEmoji(content)){
+      return encodeURIComponent(content)
+    }else{
+      return content
+    }
+  }
+
+  const renderTime = (item)=>{
+    const date = new Date(item);
+    var h = date.getHours()*1+7;
+    const m = date.getMinutes()*1;
+    if(h===24){
+      h=0;
+    }else if(h===25){
+      h=1;
+    }else if(h===26){
+      h=2;
+    }else if(h===27){
+      h=3;
+    }else if(h===28){
+      h=4;
+    }else if(h===29){
+      h=5;
+    }else if(h===30){
+      h=6;
+    }else if(h===31){
+      h=7;
+    }
+    if(m<10){
+      return h+":0"+m;
+    }else{
+      return h+ ":"+m;
+    }
+
+  }
+
+  const renderDate = (item)=>{
+    const date = new Date(item);
+    const d = date.getDate();
+    const m = date.getMonth()*1+1;
+    const y = date.getFullYear();
+    return d+"/"+m+"/"+y;
+  }
 
   return (
     <section style={{ padding: "0px" }} className="chat">
@@ -137,12 +194,17 @@ const ChatBox = ({ scrollRef }) => {
           .reverse()
           .map((item, index) => {
             return (
-              <>
+              <React.Fragment key={index}>
+
                 {item.name === user.username ? (
+
                   <div key={item.id} className="message text-only">
+
                     <div className="response">
                       {/* <p className="text"> {item.mes} </p> */}
+                      <p style={{color:'white', margin:'0px 35px', fontSize:'12px', textAlign:'right'}}>{renderDate(item?.createAt)}</p>
                       <p className="text">
+
                         {" "}
                         {checkURL(item.mes) ? (
                           <div>
@@ -167,46 +229,67 @@ const ChatBox = ({ scrollRef }) => {
                             ></iframe>
                           </div>
                         ) : (
-                          <span>{decodeURIComponent(item.mes)}</span>
+                            <>
+
+                              <span>{decodeURIComponent(item.mes)}</span> <br/>
+                              <span style={{fontSize:'12px'}}>
+                                  {renderTime(item?.createAt)}
+
+                              </span>
+                            </>
+
                         )}
                       </p>
                     </div>
                   </div>
                 ) : (
-                  <div key={item.id} className="message">
-                    <div className="text">
-                      <b>{item.name}</b>
-                      <p>
-                        {checkURL(item.mes) ? (
-                          <div>
-                            <a target="_blank" href={item.mes}>
-                              {item.mes}
-                            </a>
-                            <iframe
-                              width="100%"
-                              height="315"
-                              src={
-                                checkIncludes(
-                                  item.mes,
-                                  "https://www.youtube.com/"
-                                )
-                                  ? replaceText(item.mes, "watch?v=", "embed/")
-                                  : item.mes
-                              }
-                              title="YouTube video player"
-                              frameborder="0"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                              allowfullscreen
-                            ></iframe>
-                          </div>
-                        ) : (
-                          <span>{decodeURIComponent(item.mes)}</span>
-                        )}
-                      </p>
-                    </div>
-                  </div>
+                    <>
+                      <p style={{color:'white', margin:'0px 35px', fontSize:'12px', display:'block'}}>{renderDate(item?.createAt)}</p>
+                      <div key={item.id} className="message">
+
+                        <div className="text">
+
+                          <b>{item.name}</b>
+                          <p>
+                            {checkURL(item.mes) ? (
+                                <div>
+                                  <a target="_blank" href={item.mes}>
+                                    {item.mes}
+                                  </a>
+                                  <iframe
+                                      width="100%"
+                                      height="315"
+                                      src={
+                                        checkIncludes(
+                                            item.mes,
+                                            "https://www.youtube.com/"
+                                        )
+                                            ? replaceText(item.mes, "watch?v=", "embed/")
+                                            : item.mes
+                                      }
+                                      title="YouTube video player"
+                                      frameborder="0"
+                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                      allowfullscreen
+                                  ></iframe>
+                                </div>
+                            ) : (
+                                <>
+                                  <span>{decodeURIComponent(item.mes)}</span> <br/>
+                                  <span style={{fontSize:'12px'}}>
+                                  {renderTime(item?.createAt)}
+
+                              </span>
+                                </>
+
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    </>
+
                 )}
-              </>
+              </React.Fragment>
             );
           })}
       </div>
@@ -222,6 +305,11 @@ const ChatBox = ({ scrollRef }) => {
                 onChange={handleChange}
                 placeholder="Type your message here"
               />
+              {/*<textarea style={{ width: "100%" }}*/}
+              {/*          type="text"*/}
+              {/*          className="write-message write-content-mes" value={content}*/}
+              {/*          onChange={handleChange}*/}
+              {/*          placeholder="Type your message here" rows={4} id="w3review" name="w3review" ></textarea>*/}
               <div className="chooseFile">
                 <input className="custom-file-input" onChange={handleChangeFile} type="file" />
               </div>

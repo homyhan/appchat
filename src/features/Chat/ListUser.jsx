@@ -1,23 +1,103 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMesPeople, fetchMesRoom } from "./thunk";
+import {fetchListUser, fetchMesPeople, fetchMesRoom} from "./thunk";
 import "./ChatMain.css";
 import CreateRoom from "./CreateRoom";
 import { FindPerson } from "./FindPerson";
+import {getWebSocket} from "../../utils/websocket";
 
 const ListUser = ({ scrollRef }) => {
     const dispatch = useDispatch();
     const [activeUser, setActiveUser] = useState(null);
-    const { listUser } = useSelector((state) => state.chat);
-    const { socket, user } = useSelector((state) => state.auth);
+    const { listUser, toUser, listNewUser } = useSelector((state) => state.chat);
+    const { user } = useSelector((state) => state.auth);
+    const [newListUser, setNewListUser] = useState([]);
+    const [cloneListUser, setCloneListUser] = useState([]);
+
+    const [isLogined, setIsLogged] = useState(false);
+    const [isOnline, setIsOnline] = useState(false);
+
+
+    useEffect(() => {
+        if ( Array.isArray(listUser)) {
+
+            setNewListUser([...listUser])
+        }
+
+    }, [listUser]);
+    // useEffect(() => {
+    //     socket.onmessage = async (evt) => {
+    //         const res = JSON.parse(evt.data);
+    //         console.log(res);
+    //         if (!isLogined) {
+    //             console.log("res trong useEff", res);
+    //             // await dispatch(fetchListUser(socket));
+    //             setIsLogged(true);
+    //         }
+    //         if (res.event === "SEND_CHAT") {
+    //             console.log("res.data", res.data);
+    //             setNewListUser((prevListMes) => [...prevListMes, res.data]);
+    //         }
+    //     };
+    // }, [socket]);
+
+    useEffect(()=>{
+
+        const cloneNew = newListUser.reduce((acc, item) => {
+            const existingItem = acc.find((elem) => elem.name === item.name);
+            if (!existingItem) {
+                acc.push(item);
+            }
+            return acc;
+        }, []);
+
+
+        const uniqueArrA = listNewUser.reduce((acc, item) => {
+            const existingItem = acc.find((elem) => elem.name === item.name);
+            if (!existingItem) {
+                acc.push(item);
+            }
+            return acc;
+        }, []);
+
+        setNewListUser((prevArrA) => prevArrA.concat(uniqueArrA))
+
+    }, [listNewUser, listUser])
+
+    useEffect(() => {
+        const socket = getWebSocket();
+
+        const apiData = {
+            action: 'onchat',
+            data: {
+                event: 'GET_USER_LIST',
+            },
+        };
+        const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+        if(loggedInUser){
+            socket.send(JSON.stringify(apiData));
+        }
+
+        socket.onmessage = (event) => {
+            const res = JSON.parse(event.data);
+            dispatch({
+                type:"USERLIST",
+                payload: res.data
+            })
+        };
+
+        return () => {
+
+        };
+    }, []);
 
     const handleScrollToBottom = () => {
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     };
 
-    const handleChat = async (username, type) => {
-        console.log(username === "");
 
+    const handleChat = async (username, type) => {
+        const socket = getWebSocket();
         await dispatch({
             type: "TO_USER1",
             payload: {
@@ -30,10 +110,12 @@ const ListUser = ({ scrollRef }) => {
             handleScrollToBottom();
         } else {
             await dispatch(fetchMesPeople(socket, username));
+
             handleScrollToBottom();
         }
         setActiveUser(username);
     };
+
 
     return (
         <section
@@ -43,13 +125,9 @@ const ListUser = ({ scrollRef }) => {
             <div style={{ display: "flex" }} className="discussion search">
                 <CreateRoom></CreateRoom>
                 <FindPerson></FindPerson>
-                {/* <div className="searchbar">
-          <i className="fa fa-search" aria-hidden="true" />
-          <input type="text" placeholder="Search..." />
-        </div> */}
             </div>
             <div id="style-11" className="listUserChat">
-                {listUser?.map((item, index) => {
+                {newListUser?.map((item, index) => {
                     return (
                         <div
                             key={index}
@@ -58,7 +136,7 @@ const ListUser = ({ scrollRef }) => {
                                     ? { display: "none" }
                                     : {}
                             }
-                            className={`discussion ${activeUser === item.name ? "active" : ""}`}
+                            className={`discussion ${activeUser === item.name || toUser?.nameUserChat === item.name ? "active" : ""}`}
                             onClick={() => handleChat(item.name, item.type)}
                         >
                             <div
@@ -75,22 +153,16 @@ const ListUser = ({ scrollRef }) => {
                                                 "url(https://img.freepik.com/premium-vector/businesspeople-character-avatar-icon_24877-18272.jpg)",
                                         }
                                 }
-                                // style={{
-                                //   backgroundImage:
-                                //     "url(https://img.freepik.com/premium-vector/businesspeople-character-avatar-icon_24877-18272.jpg)",
-                                // }}
-                                // style={{
-                                //   backgroundImage:
-                                //     "url(http://e0.365dm.com/16/08/16-9/20/theirry-henry-sky-sports-pundit_3766131.jpg?20161212144602)",
-                                // }}
+
                             >
-                                <div className="online" />
+                                {/*<div className="online" />*/}
+                                {/*{checkUserOnl(item.name) === true ? <div className="online" /> : null}*/}
+                                {/*{checkUserOnl(item.name)===true ? <div className="online" />: ''}*/}
+                                {/*{checkUser(item.name) ? <div className="online" /> : ''}*/}
+                                {/*{checkUser(item.name)}*/}
                             </div>
                             <div className="desc-contact">
                                 <p className="name">{item.name}</p>
-                                <p className="message">
-                                    Let's meet for a coffee or something today ?
-                                </p>
                             </div>
                             <div className="timer">3 min</div>
                         </div>

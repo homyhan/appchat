@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMesPeople, fetchMesRoom, joinRoom } from "./thunk";
+import Swal from 'sweetalert2'
+import {getWebSocket} from "../../utils/websocket";
 
 export const FindPerson = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [isRoom, setIsRoom] = useState(0);
   const [userOrther, setUserOrther] = useState("");
-  const { socket } = useSelector((state) => state.auth);
+  // const { socket } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    const socket = getWebSocket();
     if(userOrther==="" ||userOrther.split(" ").join("")===""){
       return alert("Vui long nhap noi dung");
     }
@@ -32,9 +34,7 @@ export const FindPerson = () => {
     // Xử lý phản hồi từ API
     socket.onmessage = async (event) => {
       const response = JSON.parse(event.data);
-      console.log(response);
       if (response.status === "success") {
-        console.log("Có tồn tại user");        
 
         await dispatch({
           type: "TO_USER1",
@@ -47,11 +47,26 @@ export const FindPerson = () => {
         if (isRoom === 0) {
           await dispatch(fetchMesPeople(socket, userOrther));
         } else {
-          await dispatch(fetchMesRoom(socket, userOrther));
-          await dispatch(joinRoom(socket, userOrther));
+          Swal.fire(
+              'Join group?',
+              '',
+              'question'
+          ).then(async (rs)=>{
+            if(rs.isConfirmed){
+              await dispatch(fetchMesRoom(socket, userOrther));
+              await dispatch(joinRoom(socket, userOrther));
+            }
+          })
+
           
         }
       } else {
+        Swal.fire({
+          icon: 'error',
+          title: "Error",
+          text: "Please check again",
+
+        })
         console.log("User không tồn tại");
       }
       //   socket.close();
