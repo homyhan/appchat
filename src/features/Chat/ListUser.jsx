@@ -9,6 +9,7 @@ import {getWebSocket} from "../../utils/websocket";
 const ListUser = ({ scrollRef }) => {
     const dispatch = useDispatch();
     const [activeUser, setActiveUser] = useState(null);
+    const [isUserChecked, setIsUserChecked] = useState(false);
     const { listUser, toUser, listNewUser } = useSelector((state) => state.chat);
     const { user } = useSelector((state) => state.auth);
     const [newListUser, setNewListUser] = useState([]);
@@ -16,6 +17,7 @@ const ListUser = ({ scrollRef }) => {
 
     const [isLogined, setIsLogged] = useState(false);
     const [isOnline, setIsOnline] = useState(false);
+    const socket = getWebSocket();
 
 
     useEffect(() => {
@@ -25,21 +27,22 @@ const ListUser = ({ scrollRef }) => {
         }
 
     }, [listUser]);
-    // useEffect(() => {
-    //     socket.onmessage = async (evt) => {
-    //         const res = JSON.parse(evt.data);
-    //         console.log(res);
-    //         if (!isLogined) {
-    //             console.log("res trong useEff", res);
-    //             // await dispatch(fetchListUser(socket));
-    //             setIsLogged(true);
-    //         }
-    //         if (res.event === "SEND_CHAT") {
-    //             console.log("res.data", res.data);
-    //             setNewListUser((prevListMes) => [...prevListMes, res.data]);
-    //         }
-    //     };
-    // }, [socket]);
+    useEffect(() => {
+
+        socket.onmessage = async (evt) => {
+            const res = JSON.parse(evt.data);
+            console.log(res);
+            if (!isLogined) {
+                console.log("res trong useEff", res);
+                // await dispatch(fetchListUser(socket));
+                setIsLogged(true);
+            }
+            if (res.event === "SEND_CHAT") {
+                console.log("res.data", res.data);
+                setNewListUser((prevListMes) => [...prevListMes, res.data]);
+            }
+        };
+    }, [socket]);
 
     useEffect(()=>{
 
@@ -50,7 +53,6 @@ const ListUser = ({ scrollRef }) => {
             }
             return acc;
         }, []);
-
 
         const uniqueArrA = listNewUser.reduce((acc, item) => {
             const existingItem = acc.find((elem) => elem.name === item.name);
@@ -90,6 +92,7 @@ const ListUser = ({ scrollRef }) => {
 
         };
     }, []);
+
 
     const handleScrollToBottom = () => {
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight;

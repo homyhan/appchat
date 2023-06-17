@@ -5,6 +5,7 @@ import Picker from "emoji-picker-react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchListUser, fetchMesPeople, fetchMesRoom } from "./thunk";
 import {getWebSocket} from "../../utils/websocket";
+import Swal from 'sweetalert2'
 
 const ChatBox = ({ scrollRef }) => {
   const { listUser, listMesPeople, toUser, listMesRoom } = useSelector(
@@ -52,6 +53,13 @@ const ChatBox = ({ scrollRef }) => {
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
+    if(content==="" ||content.split(" ").join("")===""){
+      return Swal.fire({
+        text: "Content cannot be left blank",
+        icon: 'warning',
+
+      })
+    }
     const socket = getWebSocket();
     {
       hasEmoji(content) ? console.log("co") : console.log("khong");
