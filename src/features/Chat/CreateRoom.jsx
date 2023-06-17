@@ -12,7 +12,11 @@ const CreateRoom = () => {
         event.preventDefault();
         const socket = getWebSocket();
         if(roomName==="" ||roomName.split(" ").join("")===""){
-            return alert("Vui long nhap noi dung");
+            return Swal.fire({
+                text: "Please enter room name",
+                icon: 'warning',
+
+            })
         }
 
         //Gửi yêu cầu tạo phòng đến API
@@ -64,7 +68,7 @@ const CreateRoom = () => {
         <div>
             <form onSubmit={handleSubmit}>
                 <input type="text" value={roomName} onChange={handleChange} />
-                <button type="submit" style={{padding:'10px 18px'}}>Tạo phòng</button>
+                <button type="submit" style={{padding:'10px 18px'}}>Create room</button>
             </form>
         </div>
     )

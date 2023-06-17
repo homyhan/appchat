@@ -104,6 +104,8 @@ const Singin = () => {
                 setWebsocket(socket)
                 localStorage.setItem("DATA_RELOGIN", JSON.stringify(response.data));
                 localStorage.setItem("USERNAME", JSON.stringify(username));
+                localStorage.setItem("PASS", JSON.stringify(btoa(password)));
+
                 sessionStorage.setItem("USERNAME", JSON.stringify(username));
                 sessionStorage.setItem("CODE", JSON.stringify(response?.data?.RE_LOGIN_CODE));
                 localStorage.setItem('loggedInUser', JSON.stringify({ user: username, pass: '12345' }));
