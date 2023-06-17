@@ -64,7 +64,7 @@ const CreateRoom = () => {
         <div>
             <form onSubmit={handleSubmit}>
                 <input type="text" value={roomName} onChange={handleChange} />
-                <button type="submit">Tạo phòng</button>
+                <button type="submit" style={{padding:'10px 18px'}}>Tạo phòng</button>
             </form>
         </div>
     )
