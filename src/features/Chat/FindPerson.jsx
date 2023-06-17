@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMesPeople, fetchMesRoom, joinRoom } from "./thunk";
+import {fetchListUser, fetchMesPeople, fetchMesRoom, joinRoom} from "./thunk";
 import Swal from 'sweetalert2'
 import {getWebSocket} from "../../utils/websocket";
 
@@ -47,6 +47,10 @@ export const FindPerson = () => {
         if (isRoom === 0) {
           await dispatch(fetchMesPeople(socket, userOrther));
         } else {
+          await  dispatch({
+            type: "JOIN_NEW_GR"
+          })
+          await dispatch(fetchMesRoom(socket, userOrther));
           Swal.fire(
               'Join group?',
               '',
@@ -55,6 +59,8 @@ export const FindPerson = () => {
             if(rs.isConfirmed){
               await dispatch(fetchMesRoom(socket, userOrther));
               await dispatch(joinRoom(socket, userOrther));
+              await dispatch(fetchListUser(socket));
+
             }
           })
 

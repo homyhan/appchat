@@ -27,15 +27,23 @@ const ChatMain = () => {
           }
         }
         socket.send(JSON.stringify(logout));
-        socket.onmessage = (evt)=>{
+        socket.onmessage = async (evt)=>{
           const res = JSON.parse(evt.data);
           console.log(res);
           if(res.status==='success'){
             sessionStorage.removeItem("USERNAME");
             sessionStorage.removeItem("CODE");
           }
-          dispatch({
+
+         await dispatch({
             type: "LOGOUT"
+          })
+          Swal.fire({
+            position: 'center',
+            icon: res.status,
+            title: res.data,
+            showConfirmButton: false,
+            timer: 1500
           })
 
         }

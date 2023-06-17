@@ -23,6 +23,13 @@ const Singin = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        if(username==="" ||username.split(" ").join("")==="" || password==="" ||password.split(" ").join("")===""){
+            return Swal.fire({
+                text: "Please do not use the spacebar",
+                icon: 'warning',
+
+            })
+        }
 
         // Gửi yêu cầu đăng ký đến API
         const requestData = {
@@ -45,6 +52,7 @@ const Singin = () => {
         // Xử lý phản hồi từ API
         socket.onmessage = (event) => {
             const response = JSON.parse(event.data);
+            console.log(response)
             if(response.status==="success"){
                 Swal.fire({
                     position: 'top-end',

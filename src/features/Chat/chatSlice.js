@@ -36,6 +36,17 @@ export const chatReducer = (state = initialState, { type, payload }) => {
 
 
       }
+      if(type==="LOGOUT"){
+        draft.listUser=[];
+        draft.listMesPeople=[];
+        draft.listMesPeople=null;
+        draft.toUser=null;
+        draft.listNewUser=[]
+      }
+      if(type === "JOIN_NEW_GR"){
+        draft.listMesPeople=[];
+        draft.listMesRoom={}
+      }
   
     });
   };

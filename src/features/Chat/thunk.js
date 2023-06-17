@@ -26,7 +26,7 @@ export const fetchMesPeople = (socketCreate, userOrther) => (dispatch) => {
 
   const handleNewMessage = (res) => {
     // Kiểm tra nếu tin nhắn mới nhận là từ người gửi hiện tại
-    if (res.data.sender === currentSender) {
+    if (res.data.name === currentSender) {
       dispatch({
         type: "LIST_MES_PEOPLE",
         payload: res.data,
@@ -106,7 +106,7 @@ export const fetchMesRoom = (socketCreate, userOrther) => (dispatch) => {
 
   const handleNewMessage = (res) => {
     // Kiểm tra nếu tin nhắn mới nhận là từ người gửi hiện tại
-    if (res.data.sender === currentSender) {
+    if (res?.data?.name === currentSender) {
       dispatch({
         type: "LIST_MES_ROOM",
         payload: res.data,
