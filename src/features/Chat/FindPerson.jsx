@@ -108,7 +108,7 @@ export const FindPerson = () => {
           />
         </div>
 
-        <button type="submit">Tìm</button>
+        <button type="submit" style={{padding:'10px 18px'}}>Tìm</button>
       </form>
     </div>
   );
