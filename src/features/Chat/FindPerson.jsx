@@ -14,7 +14,11 @@ export const FindPerson = () => {
     event.preventDefault();
     const socket = getWebSocket();
     if(userOrther==="" ||userOrther.split(" ").join("")===""){
-      return alert("Vui long nhap noi dung");
+      return Swal.fire({
+        text: "Content cannot be left blank",
+        icon: 'warning',
+
+      })
     }
    
     const findPerson = {
@@ -108,7 +112,7 @@ export const FindPerson = () => {
           />
         </div>
 
-        <button type="submit" style={{padding:'10px 18px'}}>Tìm</button>
+        <button type="submit" style={{padding:'10px 18px'}}>Search</button>
       </form>
     </div>
   );
