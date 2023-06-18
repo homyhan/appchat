@@ -55,9 +55,9 @@ const Singin = () => {
             console.log(response)
             if(response.status==="success"){
                 Swal.fire({
-                    position: 'top-end',
+                    position: 'center',
                     icon: response.status,
-                    title: response.mes,
+                    title: response.status,
                     showConfirmButton: false,
                     timer: 1500
                 })

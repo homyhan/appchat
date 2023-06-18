@@ -60,8 +60,9 @@ export const FindPerson = () => {
               'Join group?',
               '',
               'question'
-          ).then(async (rs)=>{
+          ).then( async (rs)=>{
             if(rs.isConfirmed){
+              const socket = getWebSocket();
               await dispatch(fetchMesRoom(socket, userOrther));
               await dispatch(joinRoom(socket, userOrther));
               await dispatch(fetchListUser(socket));
