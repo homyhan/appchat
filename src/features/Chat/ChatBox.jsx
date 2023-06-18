@@ -77,7 +77,7 @@ const ChatBox = ({scrollRef}) => {
                     type: toUser?.isRoom === 0 ? "people" : "room",
                     to: toUser.nameUserChat,
                     // mes: hasEmoji(content) ? encodeURIComponent(content) : content,
-                    mes: img ? imageJson : setMessage()
+                    mes: setMessage()
                 },
 
             },
@@ -92,6 +92,38 @@ const ChatBox = ({scrollRef}) => {
         console.log(img);
 
         if (toUser?.isRoom === 0) {
+            // await dispatch(fetchListUser(socket));
+            // const getUserListRequest = {
+            //     action: "onchat",
+            //     data: {
+            //         event: "GET_USER_LIST",
+            //     },
+            // };
+            //
+            // socket.send(JSON.stringify(getUserListRequest));
+            //
+            // socket.onmessage = async (evt) => {
+            //     const res = JSON.parse(evt.data);
+            //     console.log(res)
+            //     if(res.status==='success'){
+            //         await dispatch({
+            //             type: "USERLIST",
+            //             payload: res.data,
+            //         });
+            //         const getMesPeople = {
+            //             action: "onchat",
+            //             data: {
+            //                 event: "GET_PEOPLE_CHAT_MES",
+            //                 data: {
+            //                     name: toUser?.nameUserChat,
+            //                     page: 1,
+            //                 },
+            //             },
+            //         };
+            //         socket.send(JSON.stringify(getMesPeople));
+            //     }
+            //
+            // }
             await dispatch(fetchMesPeople(socket, toUser?.nameUserChat));
         } else {
             await dispatch(fetchMesRoom(socket, toUser?.nameUserChat));
@@ -119,7 +151,7 @@ const ChatBox = ({scrollRef}) => {
     };
 
     const checkURL = (text) => {
-        return text.startsWith("https://");
+        return text?.startsWith("https://");
     };
 
     const checkIncludes = (text, smallText) => {
