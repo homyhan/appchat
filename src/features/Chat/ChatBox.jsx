@@ -230,7 +230,7 @@ const ChatBox = ({scrollRef}) => {
                                                 fontSize: '12px',
                                                 textAlign: 'right'
                                             }}>{renderDate(item?.createAt)}</p>
-                                            <p className="text">
+                                            <div className="text">
 
                                                 {" "}
                                                 {checkURL(item.mes) ? (
@@ -250,9 +250,9 @@ const ChatBox = ({scrollRef}) => {
                                                                     : item.mes
                                                             }
                                                             title="YouTube video player"
-                                                            frameborder="0"
+                                                            frameBorder="0"
                                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                                            allowfullscreen
+                                                            allowFullScreen
                                                         ></iframe>
                                                     </div>
                                                 ) : (
@@ -266,7 +266,7 @@ const ChatBox = ({scrollRef}) => {
                                                     </>
 
                                                 )}
-                                            </p>
+                                            </div>
                                         </div>
                                     </div>
                                 ) : (
@@ -282,7 +282,7 @@ const ChatBox = ({scrollRef}) => {
                                             <div className="text">
 
                                                 <b>{item.name}</b>
-                                                <p>
+                                                <div>
                                                     {checkURL(item.mes) ? (
                                                         <div>
                                                             <a target="_blank" href={item.mes}>
@@ -300,9 +300,9 @@ const ChatBox = ({scrollRef}) => {
                                                                         : item.mes
                                                                 }
                                                                 title="YouTube video player"
-                                                                frameborder="0"
+                                                                frameBorder="0"
                                                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                                                allowfullscreen
+                                                                allowFullScreen
                                                             ></iframe>
                                                         </div>
                                                     ) : (
@@ -315,7 +315,7 @@ const ChatBox = ({scrollRef}) => {
                                                         </>
 
                                                     )}
-                                                </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </>
