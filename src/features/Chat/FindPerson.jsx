@@ -50,6 +50,7 @@ export const FindPerson = () => {
 
         if (isRoom === 0) {
           await dispatch(fetchMesPeople(socket, userOrther));
+          setUserOrther("");
         } else {
           await  dispatch({
             type: "JOIN_NEW_GR"
@@ -64,6 +65,8 @@ export const FindPerson = () => {
               await dispatch(fetchMesRoom(socket, userOrther));
               await dispatch(joinRoom(socket, userOrther));
               await dispatch(fetchListUser(socket));
+              setUserOrther("");
+              setIsChecked(false);
 
             }
           })

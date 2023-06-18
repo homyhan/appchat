@@ -342,9 +342,11 @@ const ChatBox = ({scrollRef}) => {
                             {/*          className="write-message write-content-mes" value={content}*/}
                             {/*          onChange={handleChange}*/}
                             {/*          placeholder="Type your message here" rows={4} id="w3review" name="w3review" ></textarea>*/}
-                            <div className="chooseFile">
-                                <input className="custom-file-input" onChange={handleChangeFile} type="file"/>
-                            </div>
+
+                            {/*<div className="chooseFile">*/}
+                            {/*    <input className="custom-file-input" onChange={handleChangeFile} type="file"/>*/}
+                            {/*</div>*/}
+
                             <button
                                 className="chooseIcon"
                                 type="button"
@@ -361,11 +363,12 @@ const ChatBox = ({scrollRef}) => {
                             <i className="fa-solid fa-paper-plane"></i>
                         </button>
 
-                        <img
-                            style={{width: "200px", objectFit: "cover"}}
-                            src={img}
-                            alt="Image"
-                        ></img>
+                        {/*<img*/}
+                        {/*    style={{width: "200px", objectFit: "cover"}}*/}
+                        {/*    src={img}*/}
+                        {/*    alt="Image"*/}
+                        {/*></img>*/}
+
                     </div>
                 </form>
 

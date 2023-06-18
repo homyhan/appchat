@@ -101,7 +101,7 @@ body {
 /* ===== MENU ===== */
 .menu {
     float: left;
-    /* height: 700px; */
+    height: 720px;
     width: 70px;
     background: #4768b5;
     background: -webkit-linear-gradient(#4768b5, #35488e);
@@ -142,7 +142,7 @@ body {
 
 .discussions {
     width: 35%;
-    /* height: 700px; */
+    height: 720px;
     box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.2);
     overflow: hidden;
     background-color: #87a3ec;
@@ -305,8 +305,9 @@ body {
 
 .chat .messages-chat {
     padding: 25px 35px;
-    height: 450px;
+    height: 565px;
     overflow-y: scroll;
+    height: calc(100vh - 170);
 }
 
 .chat .messages-chat .message {
@@ -434,7 +435,7 @@ body {
 }
 
 .listUserChat {
-    height: 550px;
+    height: 660px;
     overflow-y: scroll;
 }
 
