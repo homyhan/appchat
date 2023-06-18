@@ -33,6 +33,8 @@ const ChatMain = () => {
           if(res.status==='success'){
             sessionStorage.removeItem("USERNAME");
             sessionStorage.removeItem("CODE");
+            localStorage.removeItem("USERNAME");
+            localStorage.removeItem("CODE");
           }
 
          await dispatch({
