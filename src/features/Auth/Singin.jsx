@@ -108,7 +108,7 @@ const Singin = () => {
 
                 sessionStorage.setItem("USERNAME", JSON.stringify(username));
                 sessionStorage.setItem("CODE", JSON.stringify(response?.data?.RE_LOGIN_CODE));
-                localStorage.setItem('loggedInUser', JSON.stringify({ user: username, pass: '12345' }));
+                localStorage.setItem('loggedInUser', JSON.stringify({ user: username}));
 
                 Swal.fire({
                     position: 'center',
@@ -160,16 +160,20 @@ const Singin = () => {
                         Sign up
                     </label>
                     <input
+                        style={{padding:'20px 12px'}}
                         type="text"
                         value={username}
                         onChange={handleUsernameChange}
                         required
+                        placeholder={"Tên tài khoản"}
                     />
 
                     <input
+                        style={{padding:'20px 12px'}}
                         type="password"
                         value={password}
                         onChange={handlePasswordChange}
+                        placeholder={"Mật khẩu"}
                     />
                     <button type="submit">Sign up</button>
                 </form>
@@ -180,16 +184,20 @@ const Singin = () => {
                         Login
                     </label>
                     <input
+                        style={{padding:'20px 12px'}}
                         type="text"
                         value={username}
                         onChange={handleUsernameChange}
                         required
+                        placeholder={"Tên tài khoản"}
                     />
                     <input
+                        style={{padding:'20px 12px'}}
                         type="password"
                         value={password}
                         onChange={handlePasswordChange}
                         required
+                        placeholder={"Mật khẩu"}
                     />
                     <button type="submit">Login</button>
                 </form>

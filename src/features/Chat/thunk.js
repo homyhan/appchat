@@ -55,6 +55,7 @@ export const fetchMesPeople = (socketCreate, userOrther) => (dispatch) => {
       payload: res.data,
     });
 
+
     if (res.event === "SEND_CHAT") {
       console.log("send chat", res.data);
       currentSender = res.data.name; // Cập nhật người gửi hiện tại
