@@ -125,13 +125,7 @@ const Singin = () => {
 
                     },
                 });
-
-                // Kiểm tra nếu chưa gọi yêu cầu "GET_USER_LIST" sau khi đăng nhập thành công
-                // if (!isLogged) {
-                //     setIsLogged(true);
-                //     await dispatch(fetchListUser(socket));
-                //
-                // }
+               
 
                 return navigate("/chat");
             } else {
