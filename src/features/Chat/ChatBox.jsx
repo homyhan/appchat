@@ -107,7 +107,6 @@ const ChatBox = ({ scrollRef }) => {
         data: {
           type: toUser?.isRoom === 0 ? "people" : "room",
           to: toUser.nameUserChat,
-          // mes: hasEmoji(content) ? encodeURIComponent(content) : content,
           mes: setMessage(),
         },
       },
@@ -123,43 +122,10 @@ const ChatBox = ({ scrollRef }) => {
     console.log(img);
 
     if (toUser?.isRoom === 0) {
-      // await dispatch(fetchListUser(socket));
-      // const getUserListRequest = {
-      //     action: "onchat",
-      //     data: {
-      //         event: "GET_USER_LIST",
-      //     },
-      // };
-      //
-      // socket.send(JSON.stringify(getUserListRequest));
-      //
-      // socket.onmessage = async (evt) => {
-      //     const res = JSON.parse(evt.data);
-      //     console.log(res)
-      //     if(res.status==='success'){
-      //         await dispatch({
-      //             type: "USERLIST",
-      //             payload: res.data,
-      //         });
-      //         const getMesPeople = {
-      //             action: "onchat",
-      //             data: {
-      //                 event: "GET_PEOPLE_CHAT_MES",
-      //                 data: {
-      //                     name: toUser?.nameUserChat,
-      //                     page: 1,
-      //                 },
-      //             },
-      //         };
-      //         socket.send(JSON.stringify(getMesPeople));
-      //     }
-      //
-      // }
       await dispatch(fetchMesPeople(socket, toUser?.nameUserChat));
     } else {
       await dispatch(fetchMesRoom(socket, toUser?.nameUserChat));
     }
-    // socket.close();
   };
 
   const handleChange = (event) => {
@@ -207,18 +173,6 @@ const ChatBox = ({ scrollRef }) => {
   const replaceText = (text, text1, text2) => {
     return text.replace(text1, text2);
   };
-
-  // const handleChangeFile = (evt) => {
-  //     let file = evt.target.files[0];
-  //     let reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = (evt) => {
-  //         setImg(evt.target.result);
-  //     };
-
-  //     console.log(typeof (content));
-  //     console.log(content);
-  // };
 
   const setMessage = () => {
     if (hasEmoji(content)) {
@@ -321,13 +275,12 @@ const ChatBox = ({ scrollRef }) => {
           </div>
         ) : null}
         <div className="text-end">
-            <i class="fa-solid fa-phone me-5 pe-3"></i>
-            <i
+          <i className="fa-solid fa-phone me-5 pe-3"></i>
+          <i
             className="icon clickable fa fa-ellipsis-h right"
             aria-hidden="true"
-            />
+          />
         </div>
-        
       </div>
       <div ref={scrollRef} id="style-11" className="messages-chat">
         {newMes
@@ -387,7 +340,7 @@ const ChatBox = ({ scrollRef }) => {
                             >
                               {decodeURIComponent(item.mes)}
                             </span>{" "}
-                            <br />
+                            {/* <br /> */}
                           </>
                         )}
                         {checkURLImg(item.mes) ? (
@@ -402,9 +355,7 @@ const ChatBox = ({ scrollRef }) => {
                               alt=""
                             />
                           </div>
-                        ) : (
-                          <span></span>
-                        )}
+                        ) : null}
                         {checkURLFile(item.mes) ? (
                           <div>
                             <a href={item.mes} download>
@@ -412,9 +363,7 @@ const ChatBox = ({ scrollRef }) => {
                               {nameFile(item.mes)}
                             </a>
                           </div>
-                        ) : (
-                          <span></span>
-                        )}
+                        ) : null}
                         <span style={{ fontSize: "12px" }}>
                           {renderTime(item?.createAt)}
                         </span>
@@ -476,7 +425,7 @@ const ChatBox = ({ scrollRef }) => {
                               >
                                 {decodeURIComponent(item.mes)}
                               </span>{" "}
-                              <br />
+                              {/* <br /> */}
                             </>
                           )}
                           {checkURLImg(item.mes) ? (
@@ -491,9 +440,7 @@ const ChatBox = ({ scrollRef }) => {
                                 alt=""
                               />
                             </div>
-                          ) : (
-                            <span></span>
-                          )}
+                          ) : null}
                           {checkURLFile(item.mes) ? (
                             <div>
                               <a href={item.mes} download>
@@ -501,9 +448,7 @@ const ChatBox = ({ scrollRef }) => {
                                 {nameFile(item.mes)}
                               </a>
                             </div>
-                          ) : (
-                            <span></span>
-                          )}
+                          ) : null}
                           <span style={{ fontSize: "12px" }}>
                             {renderTime(item?.createAt)}
                           </span>
@@ -516,85 +461,109 @@ const ChatBox = ({ scrollRef }) => {
             );
           })}
       </div>
-      <div className="footer-chat">
-        <form style={{ width: "90%", margin: "auto" }} onSubmit={handleSubmit}>
-          <div className="d-flex footerContent">
-            <div className="inputContent">
-              <input
-                style={{ width: "100%" }}
-                type="text"
-                className="write-message write-content-mes"
-                value={content}
-                onChange={handleChange}
-                placeholder="Type your message here"
-              />
-              {/*<textarea style={{ width: "100%" }}*/}
-              {/*          type="text"*/}
-              {/*          className="write-message write-content-mes" value={content}*/}
-              {/*          onChange={handleChange}*/}
-              {/*          placeholder="Type your message here" rows={4} id="w3review" name="w3review" ></textarea>*/}
-
-              <div className="chooseFile">
-                {/* <input className="custom-file-input" onChange={handleChangeFile} type="file"/> */}
-                {/* <input
-                  className="custom-file-input"
-                  onChange={handleImageChange2}
-                  type="file"
-                /> */}
-                <label style={{margin:'0px', padding:'0px', fontSize:'16px'}} className="control-label file_up" htmlFor="attach">
-                  <i className="fa fa-paperclip" aria-hidden="true"></i>Img
-                  <input
-                    type="file"
-                    id="attach"
-                    className="optional inputfile"
-                    onChange={handleImageChange2}
-                    name="attach"
-                  />
-                </label>
-              </div>
-
-              <div className="chooseFileFile">
-                {/* <input className="custom-file-input" onChange={handleChangeFile} type="file"/> */}
+      {toUser !== null ? (
+        <div className="footer-chat">
+          <form
+            style={{ width: "90%", margin: "auto" }}
+            onSubmit={handleSubmit}
+          >
+            <div className="d-flex footerContent">
+              <div className="inputContent">
                 <input
-                  className="custom-file-input"
-                  onChange={handleFileChange}
-                  type="file"
+                  style={{ width: "100%" }}
+                  type="text"
+                  className="write-message write-content-mes"
+                  value={content}
+                  onChange={handleChange}
+                  placeholder="Type your message here"
                 />
+
+                <div className="chooseFile">
+                  <label
+                    style={{ margin: "0px", padding: "0px", fontSize: "16px" }}
+                    className="control-label file_up"
+                    htmlFor="attach"
+                  >
+                    <i className="fa fa-paperclip" aria-hidden="true"></i>Img
+                    <input
+                      type="file"
+                      id="attach"
+                      className="optional inputfile"
+                      onChange={handleImageChange2}
+                      name="attach"
+                    />
+                  </label>
+                </div>
+
+                <div className="chooseFileFile">
+                  <input
+                    className="custom-file-input"
+                    onChange={handleFileChange}
+                    type="file"
+                  />
+                </div>
+
+                <button
+                  className="chooseIcon"
+                  type="button"
+                  onClick={toggleEmojiPicker}
+                >
+                  {showEmojiPicker ? "😊" : "😊"}
+                </button>
+                <div className="boxEmoji">
+                  {showEmojiPicker && (
+                    <Picker onEmojiClick={handleEmojiSelect} />
+                  )}
+                </div>
               </div>
 
-              <button
-                className="chooseIcon"
-                type="button"
-                onClick={toggleEmojiPicker}
-              >
-                {showEmojiPicker ? "😊" : "😊"}
+              <button style={{ width: "10%" }} type="submit">
+                <i className="fa-solid fa-paper-plane"></i>
               </button>
-              <div className="boxEmoji">
-                {showEmojiPicker && <Picker onEmojiClick={handleEmojiSelect} />}
-              </div>
+
+              {imageUrl ? (
+                <img
+                  style={{ width: "200px", objectFit: "cover" }}
+                  src={imageUrl}
+                  alt="Image"
+                ></img>
+              ) : (
+                ""
+              )}
             </div>
-
-            <button style={{ width: "10%" }} type="submit">
-              <i className="fa-solid fa-paper-plane"></i>
-            </button>
-
-            {imageUrl ? (
-              <img
-                style={{ width: "200px", objectFit: "cover" }}
-                src={imageUrl}
-                alt="Image"
-              ></img>
-            ) : (
-              ""
-            )}
-            {/* // <img
-            //   style={{ width: "200px", objectFit: "cover" }}
-            //   src={imageUrl}
-            //   alt="Image"
-            // ></img> */}
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
+      ) : (        
+        <div className="txt" id="txt">
+          {/* <b>F</b><b>A</b><b>L</b><b>L</b><b>D</b><b>O</b><b>W</b><b>N</b> */}
+          <b>L</b>
+          <b>E</b>
+          <b>T</b>
+          <b className="me-3">'S</b>
+          {/* <b> </b> */}
+          <b>C</b>
+          <b>H</b>
+          <b>A</b>
+          <b>T</b>
+          {/* <b></b>
+          <b>W</b>
+          <b>I</b>
+          <b>T</b>
+          <b>H</b>
+          <b></b>
+          <b>Y</b>
+          <b>O</b>
+          <b>U</b>
+          <b>R</b>
+          <b></b>
+          <b>F</b>
+          <b>R</b>
+          <b>I</b>
+          <b>E</b>
+          <b>N</b>
+          <b>S</b> */}
+        </div>
+      )}
 
       {/* Modal LIST MEMBER GR*/}
       <div
